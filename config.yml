@@ -1,3 +1,4 @@
+# Download
 base-url: "https://www.tagesschau.de"
 
 per-date-path: "/archiv/sendungsarchiv100~_date-DATE.html"
@@ -18,3 +19,8 @@ ignore-error-dates:
 
 target-path-prefix: "data/topics-"
 target-path-suffix: ".txt"
+
+
+# HTTP server
+http-listen-port: 8080
+find-path: "/find"
