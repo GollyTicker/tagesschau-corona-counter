@@ -1,0 +1,16 @@
+base-url: "https://www.tagesschau.de"
+
+per-date-path: "/archiv/sendungsarchiv100~_date-DATE.html"
+per-date-path-keyword: "DATE"
+per-date-path-format: "%Y%m%d"
+per-date-search-for-subpage: "tagesschau"
+
+topics-text-discriminator: "Themen der Sendung"
+
+date-format: "%Y.%m.%d"
+start-date: "2021.01.01"
+end-date: "2021.01.15"
+
+target-path-prefix: "data/topics-"
+target-path-suffix: ".txt"
+log-path-prefix: "data/logs-"
