@@ -1,13 +1,13 @@
 # Tagesschau Corona Counter
 
-A simple web-scrapper that provides utilities to count the number of occurences of "Corona" and related keywords within the recent 30 days in the "20 Uhr Tagesschau" topic list.
+A simple web-scraper that provides utilities to count the number of occurences of "Corona" and related keywords within the recent 30 days in the "20 Uhr Tagesschau" topic list.
 
 ## Setup
   1. Requires `python3`
   1. Install dependencies `pip3 install -r requirements.txt`
 
 ## Usage
-  You can web-scrap and download all topic descriptions for  specified a time period.
+  You can web-scrape and download all topic descriptions for  specified a time period.
 
   1. Edit `config.yml` and set `start-date` and `end-date` to the first and last dates for which you want to download the text. Please use the format specified in `date-format`.
   1. Run `python3 1-download-data.py`

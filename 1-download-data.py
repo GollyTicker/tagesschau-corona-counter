@@ -1,7 +1,6 @@
 import requests
 import yaml
 from datetime import datetime, timedelta
-import re
 from bs4 import BeautifulSoup
 
 CONFIG="config.yml"
@@ -13,26 +12,30 @@ def main():
 
     start, end = read_start_and_end_date()
 
-    after_end = next_day(end)
+    error_dates = read_error_dates()
 
+    after_end = next_day(end)
     current = start
     while not same_date(current, next_day(end)):
-        # TODO: redirect stdout and stderr to log-files
+        try:
+            print("=================\nGetting topics for date", current)
+            date_url = per_date_url(current)
+            date_html = download_html_for(date_url)
+            subpage_url = extract_url_to_subpage(date_html)
+            sub_html = download_html_for(subpage_url)
+            topics = extract_topics_of_show(sub_html)
+            save_topics_to_disk(topics, current)
 
-        print("Getting topics for date", current)
-        date_url = per_date_url(current)
+        except:
+            if current in error_dates:
+                print("EXPECTED: Error for date",current,". Saving empty file to disk.")
+                save_topics_to_disk("", current)
+                pass
+            else:
+                raise # preserve prior trace
 
-        date_html = download_html_for(date_url)
-
-        subpage_url = extract_url_to_subpage(date_html)
-
-        sub_html = download_html_for(subpage_url)
-
-        topics = extract_topics_of_show(sub_html)
-
-        save_topics_to_disk(topics, current)
-
-        current = next_day(current)
+        finally:
+            current = next_day(current)
 
 
 def read_config():
@@ -44,6 +47,9 @@ def read_start_and_end_date():
     start = datetime.strptime(d["start-date"], d["date-format"])
     end = datetime.strptime(d["end-date"], d["date-format"])
     return (start, end)
+
+def read_error_dates():
+    return [ datetime.strptime(date, d["date-format"]) for date in d["ignore-error-dates"] ]
 
 def next_day(date):
     return date + timedelta(days = 1)
@@ -70,13 +76,16 @@ def extract_url_to_subpage(html):
     navigator = BeautifulSoup(html,"html.parser")
 
     # findAll: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#find-all
-    links = navigator.findAll(name="a",string=d["per-date-search-for-subpage"])
+    allAnchors = navigator.findAll(name="a")
+
+    anchor_is_link_to_subpage = lambda a: d["per-date-search-for-subpage"] == a.get_text(strip=True)
+    links = [a for a in allAnchors if anchor_is_link_to_subpage(a)]
 
     # there should be exactly one taggesschau per day:
     error_on_empty(links,"anchor link to subpage")
     warn_on_more_than_one(links,"anchor link to subpage")
 
-    subpage_path = links[0]["href"] # to config?
+    subpage_path = links[0]["href"]
     subpage_url = d["base-url"] + subpage_path
     print("Extracted subpage url:",subpage_url)
 
@@ -88,22 +97,21 @@ def warn_on_more_than_one(results, elt_description):
 
 def error_on_empty(results, elt_description):
     if len(results) == 0:
-        print("ERROR: " + elt_description + "not found!")
+        print("ERROR: " + elt_description + " not found!")
         raise ValueError
 
 def extract_topics_of_show(html):
     navigator = BeautifulSoup(html, "html.parser")
 
     print("Looking for content element.")
-    main = navigator.find(name="div",class_="inhalt") # to config?
+    main = navigator.find(name="div",class_="inhalt")
     # one would be best. usually there is mor. but first one is usually correct
     warn_on_more_than_one(main,"content element")
     error_on_empty(main, "content element")
 
     print("Looking for topics text.")
-    # to config?
     teaserTexts = main.findAll(name="p",class_="teasertext")
-    is_topic_p = lambda p: d["topics-text-discriminator"] in str(p.contents[0])
+    is_topic_p = lambda p: d["topics-text-discriminator"] in p.contents[0].get_text(strip=True)
     get_text_from_p = lambda p: p.contents[1]
     topics_texts = [ get_text_from_p(p) for p in teaserTexts if is_topic_p(p) ]
 

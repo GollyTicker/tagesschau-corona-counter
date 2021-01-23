@@ -8,9 +8,13 @@ per-date-search-for-subpage: "tagesschau"
 topics-text-discriminator: "Themen der Sendung"
 
 date-format: "%Y.%m.%d"
-start-date: "2021.01.01"
-end-date: "2021.01.15"
+start-date: 2021.01.01
+end-date: 2021.01.22
+
+# for some dates, we expect the web scraping to fail for various reasons.
+# Hence we do not want to raise an error, when processing these dates
+ignore-error-dates:
+  - 2018.08.19 # no Tagesschau 20 Uhr exists for this date
 
 target-path-prefix: "data/topics-"
 target-path-suffix: ".txt"
-log-path-prefix: "data/logs-"
