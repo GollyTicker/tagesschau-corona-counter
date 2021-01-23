@@ -15,4 +15,4 @@ A simple web-scraper that provides utilities to count the number of occurences o
   1. View the topic descriptions in the respective files in `data` - i.e. `data/topics-2021.01.15.txt` for `2021.15.01`
 
 ## Dataset
-It was verified that the download of the topics text succeedes for all dates from `2016.01.01` to `2021.01.22`. Expected failure dates are recorded in `config.yml` in `ignore-error-dates`. For these dates, en empty text is added automatically.
+It was verified that the download of the topics text succeedes for all dates from `2014.01.01` to `2021.01.22`. Expected failure dates are recorded in `config.yml` in `ignore-error-dates`. For these dates, en empty text is added automatically.
