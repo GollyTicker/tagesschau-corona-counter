@@ -17,10 +17,12 @@ end-date: 2021.01.22
 ignore-error-dates:
   - 2018.08.19 # no Tagesschau 20 Uhr exists for this date
 
-target-path-prefix: "data/topics-"
-target-path-suffix: ".txt"
+# path is used for download as well as for later aggregation of data
+data-path-prefix: "data/topics-"
+data-path-suffix: ".txt"
 
 
 # HTTP server
 http-listen-port: 8080
 find-path: "/find"
+http-date-format: "%Y.%m.%d"

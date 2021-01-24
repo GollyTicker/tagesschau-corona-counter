@@ -1,17 +1,16 @@
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 from bs4 import BeautifulSoup
 
-from shared import d
+from shared import d, next_day, filename_for_date
 
 def main():
   start, end = read_start_and_end_date()
 
   error_dates = read_error_dates()
 
-  after_end = next_day(end)
   current = start
-  while not same_date(current, next_day(end)):
+  while current <= end:
     try:
       print("=================\nGetting topics for date", current)
       date_url = per_date_url(current)
@@ -40,12 +39,6 @@ def read_start_and_end_date():
 
 def read_error_dates():
   return [ datetime.strptime(date, d["date-format"]) for date in d["ignore-error-dates"] ]
-
-def next_day(date):
-  return date + timedelta(days = 1)
-
-def same_date(dta, dtb):
-  return dta.strftime("%Y-%m-%d") == dtb.strftime("%Y-%m-%d")
 
 # date: datetime object
 def per_date_url(date):
@@ -115,8 +108,7 @@ def extract_topics_of_show(html):
   return topics_texts[0]
 
 def save_topics_to_disk(topics, date):
-  filename = d["target-path-prefix"] + date.strftime(d["date-format"]) + d["target-path-suffix"]
-  with open(filename,"w") as f:
+  with open(filename_for_date(date),"w") as f:
     f.write(topics)
   print("Wrote topics to file:",filename)
 
