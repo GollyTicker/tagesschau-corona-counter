@@ -25,4 +25,5 @@ data-path-suffix: ".txt"
 # HTTP server
 http-listen-port: 8080
 find-path: "/find"
+file-path: "/file"
 http-date-format: "%Y.%m.%d"

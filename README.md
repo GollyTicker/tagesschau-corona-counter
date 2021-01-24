@@ -7,11 +7,13 @@ A simple web-scraper that provides utilities to count the number of occurences o
   1. Install dependencies `pip3 install -r requirements.txt`
 
 ## HTTP Service
-  The HTTP service returns a JSON array for all the dates requested for during a period of time.
+  The HTTP service consits of two paths. First, `/find/<term>` which searches for hits for a `term` and `/file/<date>` which returns the text for a given date.
 
-  To run the service simply run `2-http.py`. (_WORK_IN_PROGRESS_)
+  To run the service simply run `2-http.py`.
 
-  Now you can send requests such as `find/Corona?start=2021.01.15&end=2020.01.20` which will return an array of size 6 (15th to 20th January) containing a boolean for each date. The boolean indicates whether the string `Corona` was contained in the topics description for that date.
+  Now you can send requests such as `find/Corona?start=2021.01.15&end=2020.01.20` which will return a JSON object with a property `result` containing an array of size 6 (15th to 20th January) containing a boolean for each date. The boolean indicates whether the string `Corona` was contained in the topics description for that date.
+
+  To get the text for a given date simply make a call such as `/file/2021.01.15` which will return a JSON with a `result` property containing the text as a string.
 
 ## Downloading the data
   You can web-scrape and download all topic descriptions for  specified a time period.
