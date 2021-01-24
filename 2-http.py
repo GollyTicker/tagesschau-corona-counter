@@ -15,7 +15,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
 
         find_path_prefix = d["find-path"]+"/"
-        file_path_prefix = d["file-path"]+"/"
+        text_path_prefix = d["text-path"]
 
         # /find/<term>?start=<date>&end=<date>
         if self.path.startswith(find_path_prefix):
@@ -23,9 +23,9 @@ class Handler(BaseHTTPRequestHandler):
             self.with_exceptions_as_http(process_find_request,[path_rest])
 
         # /file/<date>
-        elif self.path.startswith(file_path_prefix):
-            path_rest = self.path[len(file_path_prefix):]
-            self.with_exceptions_as_http(process_file_request, [path_rest])
+        elif self.path.startswith(text_path_prefix):
+            path_rest = self.path[len(text_path_prefix):]
+            self.with_exceptions_as_http(process_text_request, [path_rest])
         else:
             self.send_error(404)
 
@@ -44,9 +44,15 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(jsonBody.encode())
 
-def process_file_request(path_rest):
-    date = extract_date(path_rest)
-    return read_file_for_date(date)
+def process_text_request(path_rest):
+    start, end = extract_start_end_dates(path_rest)
+    result = []
+    current = start
+    while current <= end:
+        result.append( read_file_for_date(current) )
+        current = next_day(current)
+    print("Result with",len(result),"elements.")
+    return result
 
 def process_find_request(path_rest):
     params = extract_parameters(path_rest)
@@ -65,20 +71,18 @@ def compute_result_array(params):
 def day_contains_term(date, term):
     return term in read_file_for_date(date)
 
-def extract_date(rest):
-    components = urlparse(rest)
-    return datetime.strptime(components.path, d["http-date-format"])
-
-def extract_parameters(rest):
-    components = urlparse(rest)
+def extract_start_end_dates(path):
+    components = urlparse(path)
     dates = parse_qs(components.query,strict_parsing=True)
-
-    search_term = components.path
     start_str = dates["start"][0]
     end_str = dates["end"][0]
     start = datetime.strptime(start_str, d["http-date-format"])
     end = datetime.strptime(end_str, d["http-date-format"])
+    return (start, end)
 
+def extract_parameters(rest):
+    search_term = urlparse(rest).path
+    start, end = extract_start_end_dates(rest)
     params = {"term": search_term, "start": start, "end": end}
     print("Parameters:",params)
     return params
