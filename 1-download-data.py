@@ -76,7 +76,7 @@ def extract_url_to_subpage(html):
 
 def warn_on_more_than_one(results, elt_description):
     if len(results) >= 2:
-        print("WARNING: Found multiple " + elt_description)
+        print("WARNING: Found multiple " + elt_description + f" [{len(results)}]")
 
 def error_on_empty(results, elt_description):
     if len(results) == 0:
@@ -87,25 +87,23 @@ def extract_topics_of_show(html):
     navigator = BeautifulSoup(html, "html.parser")
 
     print("Looking for content element.")
-    main = navigator.find(name="div",class_="inhalt")
+    main = navigator.find(name="div",class_="copytext__video__details")
     # one would be best. usually there is mor. but first one is usually correct
     warn_on_more_than_one(main,"content element")
     error_on_empty(main, "content element")
 
     print("Looking for topics text.")
-    teaserTexts = main.findAll(name="p",class_="teasertext")
-    is_topic_p = lambda p: d["topics-text-discriminator"] in p.contents[0].get_text(strip=True)
-    get_text_from_p = lambda p: p.contents[1]
-    topics_texts = [ get_text_from_p(p) for p in teaserTexts if is_topic_p(p) ]
+    teaserTexts = main.findAll(name="p")
+    warn_on_more_than_one(teaserTexts,"teaser text")
+    error_on_empty(teaserTexts, "teaser text")
 
-    warn_on_more_than_one(topics_texts,"topics text")
-    error_on_empty(topics_texts,"topics text")
-
-    if topics_texts[0].strip() == "":
+    text = teaserTexts[0].get_text(strip=True)
+    
+    if text == "":
         print("ERROR: Topics text is empty!")
         raise ValueError
 
-    return topics_texts[0]
+    return text
 
 def save_topics_to_disk(topics, date):
     filename = write_file_for_date(topics, date)

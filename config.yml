@@ -6,10 +6,8 @@ per-date-path-keyword: "DATE"
 per-date-path-format: "%Y%m%d"
 per-date-search-for-subpage: "tagesschau"
 
-topics-text-discriminator: "Themen der Sendung"
-
 date-format: "%Y.%m.%d"
-start-date: 2021.01.22
+start-date: 2021.01.01
 end-date: 2021.01.25
 
 # for some dates, we expect the web scraping to fail for various reasons.
@@ -23,7 +21,7 @@ data-path-suffix: ".txt"
 
 
 # HTTP server
-http-listen-port: 8080
+http-listen-port: 11000
 find-path: "/find"
 text-path: "/text"
 sum-path: "/sum"
