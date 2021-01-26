@@ -10,6 +10,9 @@ def read_config():
 def next_day(date):
     return date + timedelta(days = 1)
 
+def n_days_before(n,date):
+    return date - timedelta(days = n)
+
 def filename_for_date(date):
     return d["data-path-prefix"] + date.strftime(d["date-format"]) + d["data-path-suffix"]
 

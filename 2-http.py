@@ -1,21 +1,26 @@
 import traceback
 import json
 from datetime import datetime
+import numpy as np
 from urllib.parse import *
 from http.server import *
 
-from shared import d, next_day, read_file_for_date
+from shared import d, next_day, read_file_for_date, n_days_before
 
 def run_http_server():
     server_address = ("localhost", d["http-listen-port"])
     httpd = HTTPServer(server_address, Handler)
+    print(f"Serving at {server_address}")
     httpd.serve_forever()
 
+
+# HTTP requests handler
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
 
         find_path_prefix = d["find-path"]+"/"
         text_path_prefix = d["text-path"]
+        sum_path_prefix = d["sum-path"]+"/"
 
         # /find/<term>?start=<date>&end=<date>
         if self.path.startswith(find_path_prefix):
@@ -26,6 +31,12 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path.startswith(text_path_prefix):
             path_rest = self.path[len(text_path_prefix):]
             self.with_exceptions_as_http(process_text_request, [path_rest])
+
+        # /scansum/<term>?n=<n>&start=<date>&end=<date>&
+        elif self.path.startswith(sum_path_prefix):
+            path_rest = self.path[len(sum_path_prefix):]
+            self.with_exceptions_as_http(process_sum_request, [path_rest])
+
         else:
             self.send_error(404)
 
@@ -44,6 +55,49 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(jsonBody.encode())
 
+
+# sum request
+def process_sum_request(path_rest):
+    term, N, start, end = extract_sum_request_parameters(path_rest)
+    if N < 1:
+        raise ValueError(f"n = {N} be >= 1.")
+    array = compute_binary_occurrance_array(term, n_days_before(N,start), end)
+    scan_sum = scansum(N, to_np_array(bool, array) )
+    print(f"Result: {scan_sum}")
+    return to_py_list(int,scan_sum)
+
+def to_np_array(type, py_list):
+    return np.array(py_list, dtype=np.dtype(type))
+
+def to_py_list(type, nparray):
+    return list(map(type,nparray))
+
+def extract_sum_request_parameters(rest):
+    search_term = urlparse(rest).path
+    start, end = extract_start_end_dates(rest)
+    N = int(parse_qs(urlparse(rest).query,strict_parsing=True)["n"][0])
+    return (search_term, N, start, end)
+
+#   scansum(3,[a,  b,    c,     d,     e])
+# =                 [a+b+c, b+c+d, c+d+e]
+# fast O(n) N-element scansum
+# using a sliding algorithm where a+b+c -> b+c -> b+c+d in each iteration.
+def scansum(N, a):
+    L = len(a)-(N-1)
+    result = np.zeros(L, dtype=np.int)
+    s = 0
+    for i in range(len(a)):
+        s = s + a[i]
+        di = i-(N-1)
+        if di >= 0:
+            result[di] = s
+            s = s - a[di]
+
+    print(f"scansum({N},len(a)={len(a)}) => len(result) = {len(result)}")
+    return result
+
+
+# text request
 def process_text_request(path_rest):
     start, end = extract_start_end_dates(path_rest)
     result = []
@@ -54,18 +108,29 @@ def process_text_request(path_rest):
     print("Result with",len(result),"elements.")
     return result
 
+
+# find request
 def process_find_request(path_rest):
-    params = extract_parameters(path_rest)
-    return compute_result_array(params)
+    params = extract_find_parameters(path_rest)
+    array = compute_binary_occurrance_array(**params)
+    print("Result:", array)
+    return array
+
+def extract_find_parameters(rest):
+    search_term = urlparse(rest).path
+    start, end = extract_start_end_dates(rest)
+    params = {"term": search_term, "start": start, "end": end}
+    print("Parameters:",params)
+    return params
 
 
-def compute_result_array(params):
-    current = params["start"]
+# utilities shared by the requests
+def compute_binary_occurrance_array(term, start, end):
+    current = start
     result = []
-    while current <= params["end"]:
-        result.append( day_contains_term(current,params["term"]) )
+    while current <= end:
+        result.append( day_contains_term(current, term) )
         current = next_day(current)
-    print("Result:",result)
     return result
 
 def day_contains_term(date, term):
@@ -80,13 +145,7 @@ def extract_start_end_dates(path):
     end = datetime.strptime(end_str, d["http-date-format"])
     return (start, end)
 
-def extract_parameters(rest):
-    search_term = urlparse(rest).path
-    start, end = extract_start_end_dates(rest)
-    params = {"term": search_term, "start": start, "end": end}
-    print("Parameters:",params)
-    return params
 
-
+# main
 if __name__ == "__main__":
     run_http_server()

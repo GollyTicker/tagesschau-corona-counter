@@ -1,6 +1,10 @@
 # data
 data/*.*
 
+# visualisations for sharing
+*.png
+*.gif
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
