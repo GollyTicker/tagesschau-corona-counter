@@ -3,8 +3,16 @@
 A simple web-scraper that provides utilities to count the number of occurences of "Corona" and related keywords within the recent 30 days in the "20 Uhr Tagesschau" topic list.
 
 ## Setup
-  1. Requires `python3`
-  1. Install dependencies `pip3 install -r requirements.txt`
+If you know `docker`:
+1. Requires `docker`
+1. `./restart-http-service.sh`
+
+Otherwise:
+1. Requires `python`
+1. Install dependencies via `pip install -r requirements.txt`
+1. Follow the [download instructions](#downloading-the-data) below
+1. Start local HTTP service using `python3 2-http.py`
+
 
 ## HTTP Service
   The HTTP service consits of two paths. First, `/find/<term>` which searches for hits for a `term` and `/text` which returns the text for a given range of dates.
