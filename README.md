@@ -13,7 +13,9 @@ A simple web-scraper that provides utilities to count the number of occurences o
 
   Now you can send requests such as `find/Corona?start=2021.01.15&end=2020.01.20` which will return a JSON object with a property `result` containing an array of size 6 (15th to 20th January) containing a boolean for each date. The boolean indicates whether the string `Corona` was contained in the topics description for that date.
 
-  To get the texts for range of dates date simply make a call such as `/file?start=2021.01.15&end=2021.01.20` which will return a JSON with a `result` property containing an element of text for each date from `2021.01.15` to `2021.01.20`.
+  To get the texts for range of dates date simply make a call such as `/text?start=2021.01.15&end=2021.01.20` which will return a JSON with a `result` property containing an element of text for each date from `2021.01.15` to `2021.01.20`.
+
+  To get the aggregations for a range of dates you can use `/sum/<term>?n=<n>&start=<date>&end=<date>`. For each `date` in the range between `start` and `end` (including both), it will count the number of days among the most-recent `N` days where `term` was contained in that day's text. The response is a JSON with a `result` property being an array with an element for each day in the date-range. For example, if `Corona` occurred in the text on Monday, Tuesday, Thursday and Saturday, then the result for `n = 4` will be `2`. This is because only Tuesday and Thursday in [Tuesday, Wednesday, Thursday, Friday] are counted. Note, that `N >= 1` and that the contributions from days before `start` are needed to count the sum for the first `N-1` elements of the result.
 
 ## Downloading the data
   You can web-scrape and download all topic descriptions for  specified a time period.
