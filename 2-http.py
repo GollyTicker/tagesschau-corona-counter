@@ -8,7 +8,7 @@ from http.server import *
 from shared import d, next_day, read_file_for_date, n_days_before
 
 def run_http_server():
-    server_address = ("localhost", d["http-listen-port"])
+    server_address = ("0.0.0.0", d["http-listen-port"])
     httpd = HTTPServer(server_address, Handler)
     print(f"Serving at {server_address}")
     httpd.serve_forever()
@@ -52,6 +52,7 @@ class Handler(BaseHTTPRequestHandler):
         jsonBody = json.dumps({"result":result})
         self.send_response(200)
         self.send_header("Content-type", "application/json")
+        self.send_header("Access-Control-Allow-Origin","*")
         self.end_headers()
         self.wfile.write(jsonBody.encode())
 

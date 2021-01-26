@@ -1,1 +1,3 @@
-pkill -f "python3 2-http.py"
+echo "Stopping tagesschau-runner"
+docker stop tagesschau-runner
+echo "Stopped tagesschau-runner"
