@@ -5,13 +5,14 @@ A simple web-scraper that provides utilities to count the number of occurences o
 ## Setup
 If you know `docker`:
 1. Requires `docker`
+1. Follow the [download instructions](#downloading-the-data) below
 1. `./restart-http-service.sh`
 
 Otherwise:
 1. Requires `python`
 1. Install dependencies via `pip install -r requirements.txt`
 1. Follow the [download instructions](#downloading-the-data) below
-1. Start local HTTP service using `python3 2-http.py`
+1. Start local HTTP service using `python3 src/2-http.py`
 
 
 ## HTTP Service
@@ -20,7 +21,7 @@ Otherwise:
   * `/text` which returns the text for a given range of dates and
   * `/sum/<term>` which counts the occurances of a term in the most-recent days for a given range
 
-  To run the service simply run `2-http.py`.
+  To run the service simply run `./restart-http-service.sh` (or invoke `src/2-http.py` if outside docker).
 
   Now you can send requests such as `find/Corona?start=2021.01.15&end=2020.01.20` which will return a JSON object with a property `result` containing an array of size 6 (15th to 20th January) containing a boolean for each date. The boolean indicates whether the string `Corona` was contained in the topics description for that date.
 
@@ -32,9 +33,15 @@ Otherwise:
   You can web-scrape and download all topic descriptions for  specified a time period.
 
   1. Edit `config.yml` and set `start-date` and `end-date` to the first and last dates for which you want to download the text. Please use the format specified in `date-format`. Alternatively, you can set `end-date` to `latest` which will download until the last aired show.
-  1. Run `python3 1-download-data.py`
-  1. Run `./summarize-topic-lengths.sh` (Linux only) to see how many characters each day's topic description has. If some description is suspiciously small or large, perhaps something was scraped and mistaken as the topic description.
+  1. Run `python3 src/1-download-data.py` (only outside of docker)
+  1. Run `./src/summarize-topic-lengths.sh` (Linux only) to see how many characters each day's topic description has. If some description is suspiciously small or large, perhaps something was scraped and mistaken as the topic description.
   1. View the topic descriptions in the respective files in `data` - i.e. `data/topics-2021.01.15.txt` for `2021.15.01`
 
+  If you have already downloaded the dataset and want to update the most recent days, then run `download-data-latest.sh`. It will download all topics from `start-date` to today (or yesterday if none exists for today).
+
 ## Dataset
-  It was verified that the download of the topics text succeeds for all dates from `2014.01.01` to `2021.01.22`. Expected failure dates are recorded in `config.yml` in `ignore-error-dates`. For these dates, en empty text is added automatically.
+  It was verified that the download of the topics text succeeds for all dates from `2014.01.01` to `2021.01.29`. Expected failure dates are recorded in `config.yml` in `ignore-error-dates`. For these dates, en empty text is added automatically.
+
+## Notes
+
+  Python is invoked with the `-u` option inside the docker container to provide immediate stdout prints as otherwise the buffering may confuse a user who downloads the data.

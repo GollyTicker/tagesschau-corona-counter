@@ -5,8 +5,10 @@ set -e
 
 PORT=`cat config/config.yml | grep "http-listen-port" | awk '{print $2}'`
 
+# duplicated in other scripts
 docker build -t tagesschau:v1 .
 
+# duplicated in other scripts
 CMD="docker run --rm \
 --name tagesschau-runner \
 -v ${PWD}/data:/app/data \
