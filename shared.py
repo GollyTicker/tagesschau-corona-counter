@@ -1,7 +1,7 @@
 import yaml
 from datetime import timedelta
 
-CONFIG = "config.yml"
+CONFIG = "config/config.yml"
 
 def read_config():
     with open(CONFIG,"r") as file:

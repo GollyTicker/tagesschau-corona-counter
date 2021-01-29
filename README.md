@@ -31,7 +31,7 @@ Otherwise:
 ## Downloading the data
   You can web-scrape and download all topic descriptions for  specified a time period.
 
-  1. Edit `config.yml` and set `start-date` and `end-date` to the first and last dates for which you want to download the text. Please use the format specified in `date-format`.
+  1. Edit `config.yml` and set `start-date` and `end-date` to the first and last dates for which you want to download the text. Please use the format specified in `date-format`. Alternatively, you can set `end-date` to `latest` which will download until the last aired show.
   1. Run `python3 1-download-data.py`
   1. Run `./summarize-topic-lengths.sh` (Linux only) to see how many characters each day's topic description has. If some description is suspiciously small or large, perhaps something was scraped and mistaken as the topic description.
   1. View the topic descriptions in the respective files in `data` - i.e. `data/topics-2021.01.15.txt` for `2021.15.01`

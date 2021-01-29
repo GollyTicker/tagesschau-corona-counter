@@ -2,7 +2,7 @@ import requests
 from datetime import datetime
 from bs4 import BeautifulSoup
 
-from shared import d, next_day, write_file_for_date
+from shared import d, next_day, write_file_for_date, n_days_before
 
 def main():
     start, end = read_start_and_end_date()
@@ -34,8 +34,17 @@ def main():
 
 def read_start_and_end_date():
     start = datetime.strptime(d["start-date"], d["date-format"])
-    end = datetime.strptime(d["end-date"], d["date-format"])
+    endstr = d["end-date"]
+    end = get_latest_date() if endstr == "latest" else datetime.strptime(endstr, d["date-format"])
     return (start, end)
+
+def get_latest_date():
+    # If we are after 22:00 then we take today, as tagesschau will be uploaded
+    # to archive already. Otherwise we take the previous day
+    now = datetime.now()
+    today = now.replace(hour=0,minute=0,second=0,microsecond=0)
+    time_of_upload = today.replace(hour=22)
+    return today if time_of_upload <= now else n_days_before(1,today)
 
 def read_error_dates():
     return [ datetime.strptime(date, d["date-format"]) for date in d["ignore-error-dates"] ]
@@ -98,7 +107,7 @@ def extract_topics_of_show(html):
     error_on_empty(teaserTexts, "teaser text")
 
     text = teaserTexts[0].get_text(strip=True)
-    
+
     if text == "":
         print("ERROR: Topics text is empty!")
         raise ValueError
