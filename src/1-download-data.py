@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from shared import d, next_day, write_file_for_date, n_days_before
@@ -41,9 +41,9 @@ def read_start_and_end_date():
 def get_latest_date():
     # If we are after 22:00 then we take today, as tagesschau will be uploaded
     # to archive already. Otherwise we take the previous day
-    now = datetime.now()
-    today = now.replace(hour=0,minute=0,second=0,microsecond=0)
-    time_of_upload = today.replace(hour=22)
+    now = datetime.now().replace(tzinfo=timezone.utc)
+    today = datetime.now().replace(hour=0,minute=0,second=0,microsecond=0)
+    time_of_upload = today.replace(hour=20,minute=50,tzinfo=timezone(timedelta(hours=1)))
     return today if time_of_upload <= now else n_days_before(1,today)
 
 def read_error_dates():
