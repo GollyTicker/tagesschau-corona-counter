@@ -4,15 +4,17 @@ from datetime import datetime
 import numpy as np
 from urllib.parse import *
 from http.server import *
+import os
 
 from shared import d, next_day, read_file_for_date, n_days_before
+
+data = {}
 
 def run_http_server():
     server_address = ("0.0.0.0", d["http-listen-port"])
     httpd = HTTPServer(server_address, Handler)
     print(f"Serving at {server_address}")
     httpd.serve_forever()
-
 
 # HTTP requests handler
 class Handler(BaseHTTPRequestHandler):
@@ -104,7 +106,7 @@ def process_text_request(path_rest):
     result = []
     current = start
     while current <= end:
-        result.append( read_file_for_date(current) )
+        result.append( get_topics_for_date(current) )
         current = next_day(current)
     print("Result with",len(result),"elements.")
     return result
@@ -135,7 +137,7 @@ def compute_binary_occurrance_array(term, start, end):
     return result
 
 def day_contains_term(date, term):
-    return term in read_file_for_date(date)
+    return term in get_topics_for_date(date)
 
 def extract_start_end_dates(path):
     components = urlparse(path)
@@ -147,6 +149,32 @@ def extract_start_end_dates(path):
     return (start, end)
 
 
+def load_data_into_memory():
+    print("Loading data into memory...")
+    topic_files = all_files_in_data()
+    for file in topic_files:
+        date = extract_date_from_file_name(file)
+        date_string = date.strftime(d["date-format"])
+        data[date_string] = read_file_for_date(date)
+    print("Loaded",len(topic_files),"dates.")
+
+def get_topics_for_date(date):
+    date_string = date.strftime(d["date-format"])
+    return data[date_string]
+
+def extract_date_from_file_name(name):
+    date_string = name[len(d["data-file-prefix"]):][:-len(d["data-path-suffix"])]
+    return datetime.strptime(date_string, d["date-format"])
+
+def all_files_in_data():
+    all_files = os.listdir(d["data-folder"])
+    return [
+        file for file in all_files
+        if file.startswith(d["data-file-prefix"])
+        and file.endswith(d["data-path-suffix"])
+    ]
+
 # main
 if __name__ == "__main__":
+    load_data_into_memory()
     run_http_server()

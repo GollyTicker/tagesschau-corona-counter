@@ -29,6 +29,8 @@ Otherwise:
 
   To get the aggregations for a range of dates you can use `/sum/<term>?n=<n>&start=<date>&end=<date>`. For each `date` in the range between `start` and `end` (including both), it will count the number of days among the most-recent `N` days where `term` was contained in that day's text. The response is a JSON with a `result` property being an array with an element for each day in the date-range. For example, if `Corona` occurred in the text on Monday, Tuesday, Thursday and Saturday, then for day Friday and `n = 4` the result will be `2`. This is because only Tuesday and Thursday in `[Tuesday, Wednesday, Thursday, Friday]` contribute to the count. Note, that `N >= 1` and that the contributions from days before `start` are needed to count the sum for the first `N-1` elements of the result.
 
+  If you download new data, you will need to restart the HTTP-Server as it loads everything into memory during startup for higher performance during requests.
+
 ## Downloading the data
   You can web-scrape and download all topic descriptions for  specified a time period.
 

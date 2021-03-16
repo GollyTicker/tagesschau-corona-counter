@@ -16,6 +16,8 @@ ignore-error-dates:
   - 2018.08.19 # no Tagesschau 20 Uhr exists for this date
 
 # path is used for download as well as for later aggregation of data
+data-folder: "data"
+data-file-prefix: "topics-"
 data-path-prefix: "data/topics-"
 data-path-suffix: ".txt"
 
