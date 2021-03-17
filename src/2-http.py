@@ -24,17 +24,14 @@ class Handler(BaseHTTPRequestHandler):
         text_path_prefix = d["text-path"]
         sum_path_prefix = d["sum-path"]+"/"
 
-        # /find/<term>?start=<date>&end=<date>
         if self.path.startswith(find_path_prefix):
             path_rest = self.path[len(find_path_prefix):]
             self.with_exceptions_as_http(process_find_request,[path_rest])
 
-        # /file/<date>
         elif self.path.startswith(text_path_prefix):
             path_rest = self.path[len(text_path_prefix):]
             self.with_exceptions_as_http(process_text_request, [path_rest])
 
-        # /scansum/<term>?n=<n>&start=<date>&end=<date>&
         elif self.path.startswith(sum_path_prefix):
             path_rest = self.path[len(sum_path_prefix):]
             self.with_exceptions_as_http(process_sum_request, [path_rest])
