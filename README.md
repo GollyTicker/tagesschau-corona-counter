@@ -47,3 +47,30 @@ Otherwise:
 ## Notes
 
   Python is invoked with the `-u` option inside the docker container to provide immediate stdout prints as otherwise the buffering may confuse a user who downloads the data.
+
+## Vue Project (work in progress)
+
+Working directory: `web`
+
+**Setup**
+```
+npm install
+```
+
+**Compiles and hot-reloads for development**
+```
+npm run serve
+```
+
+**Compiles and minifies for production**
+```
+npm run build
+```
+
+**Lints and fixes files**
+```
+npm run lint
+```
+
+**Customize configuration**
+See [Configuration Reference](https://cli.vuejs.org/config/).
