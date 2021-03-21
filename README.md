@@ -50,7 +50,9 @@ Otherwise:
 
 ## Vue Project (work in progress)
 
-Working directory: `web`
+First start the http backend service locally using `./restart-http-service.sh`
+
+Then continue with the rest in the working directory: `web`
 
 **Setup**
 ```
