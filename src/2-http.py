@@ -61,7 +61,7 @@ def process_sum_request(path_rest):
     term, N, start, end = extract_sum_request_parameters(path_rest)
     if N < 1:
         raise ValueError(f"n = {N} be >= 1.")
-    array = compute_binary_occurrance_array(term, n_days_before(N,start), end)
+    array = compute_binary_occurrence_array(term, n_days_before(N-1, start), end)
     scan_sum = scansum(N, to_np_array(bool, array) )
     print(f"Result: {scan_sum}")
     return to_py_list(int,scan_sum)
@@ -93,7 +93,7 @@ def scansum(N, a):
             result[di] = s
             s = s - a[di]
 
-    print(f"scansum({N},len(a)={len(a)}) => len(result) = {len(result)}")
+    print(f"scansum({N}, len(a)={len(a)}) => len(result) = {len(result)}")
     return result
 
 
@@ -112,7 +112,7 @@ def process_text_request(path_rest):
 # find request
 def process_find_request(path_rest):
     params = extract_find_parameters(path_rest)
-    array = compute_binary_occurrance_array(**params)
+    array = compute_binary_occurrence_array(**params)
     print("Result:", array)
     return array
 
@@ -125,7 +125,7 @@ def extract_find_parameters(rest):
 
 
 # utilities shared by the requests
-def compute_binary_occurrance_array(term, start, end):
+def compute_binary_occurrence_array(term, start, end):
     current = start
     result = []
     while current <= end:
