@@ -5,7 +5,7 @@ set -e
 
 ./stop-http-service.sh || true
 
-PORT=`cat config/config.yml | grep "http-listen-port" | awk '{print $2}'`
+PORT=$(cat config/config.yml | grep "http-listen-port" | awk '{print $2}')
 
 # duplicated in other scripts
 docker build -t tagesschau:v1 .

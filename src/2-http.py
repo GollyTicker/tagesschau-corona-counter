@@ -1,14 +1,16 @@
-import traceback
 import json
-from datetime import datetime
-import numpy as np
-from urllib.parse import *
-from http.server import *
 import os
+import traceback
+from datetime import datetime
+from http.server import *
+from urllib.parse import *
+
+import numpy as np
 
 from shared import d, next_day, read_file_for_date, n_days_before
 
 data = {}
+
 
 def run_http_server():
     server_address = ("0.0.0.0", d["http-listen-port"])
@@ -16,17 +18,18 @@ def run_http_server():
     print(f"Serving at {server_address}")
     httpd.serve_forever()
 
+
 # HTTP requests handler
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
 
-        find_path_prefix = d["find-path"]+"/"
+        find_path_prefix = d["find-path"] + "/"
         text_path_prefix = d["text-path"]
-        sum_path_prefix = d["sum-path"]+"/"
+        sum_path_prefix = d["sum-path"] + "/"
 
         if self.path.startswith(find_path_prefix):
             path_rest = self.path[len(find_path_prefix):]
-            self.with_exceptions_as_http(process_find_request,[path_rest])
+            self.with_exceptions_as_http(process_find_request, [path_rest])
 
         elif self.path.startswith(text_path_prefix):
             path_rest = self.path[len(text_path_prefix):]
@@ -39,19 +42,19 @@ class Handler(BaseHTTPRequestHandler):
         else:
             self.send_error(404)
 
-    def with_exceptions_as_http(self, func, args=[],kwargs={}):
+    def with_exceptions_as_http(self, func, args=[], kwargs={}):
         try:
-            result = func(*args,**kwargs)
+            result = func(*args, **kwargs)
             self.response_ok(result)
         except Exception as e:
             traceback.print_exc()
             self.send_error(400)
 
     def response_ok(self, result):
-        jsonBody = json.dumps({"result":result})
+        jsonBody = json.dumps({"result": result})
         self.send_response(200)
         self.send_header("Content-type", "application/json")
-        self.send_header("Access-Control-Allow-Origin","*")
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         self.wfile.write(jsonBody.encode())
 
@@ -61,34 +64,38 @@ def process_sum_request(path_rest):
     term, N, start, end = extract_sum_request_parameters(path_rest)
     if N < 1:
         raise ValueError(f"n = {N} be >= 1.")
-    array = compute_binary_occurrence_array(term, n_days_before(N-1, start), end)
-    scan_sum = scansum(N, to_np_array(bool, array) )
+    array = compute_binary_occurrence_array(term, n_days_before(N - 1, start), end)
+    scan_sum = scansum(N, to_np_array(bool, array))
     print(f"Result: {scan_sum}")
-    return to_py_list(int,scan_sum)
+    return to_py_list(int, scan_sum)
+
 
 def to_np_array(type, py_list):
     return np.array(py_list, dtype=np.dtype(type))
 
+
 def to_py_list(type, nparray):
-    return list(map(type,nparray))
+    return list(map(type, nparray))
+
 
 def extract_sum_request_parameters(rest):
     search_term = urlparse(rest).path
     start, end = extract_start_end_dates(rest)
-    N = int(parse_qs(urlparse(rest).query,strict_parsing=True)["n"][0])
+    N = int(parse_qs(urlparse(rest).query, strict_parsing=True)["n"][0])
     return (search_term, N, start, end)
+
 
 #   scansum(3,[a,  b,    c,     d,     e])
 # =                 [a+b+c, b+c+d, c+d+e]
 # fast O(n) N-element scansum
 # using a sliding algorithm where a+b+c -> b+c -> b+c+d in each iteration.
 def scansum(N, a):
-    L = len(a)-(N-1)
+    L = len(a) - (N - 1)
     result = np.zeros(L, dtype=np.int)
     s = 0
     for i in range(len(a)):
         s = s + a[i]
-        di = i-(N-1)
+        di = i - (N - 1)
         if di >= 0:
             result[di] = s
             s = s - a[di]
@@ -103,9 +110,9 @@ def process_text_request(path_rest):
     result = []
     current = start
     while current <= end:
-        result.append( get_topics_for_date(current) )
+        result.append(get_topics_for_date(current))
         current = next_day(current)
-    print("Result with",len(result),"elements.")
+    print("Result with", len(result), "elements.")
     return result
 
 
@@ -116,11 +123,12 @@ def process_find_request(path_rest):
     print("Result:", array)
     return array
 
+
 def extract_find_parameters(rest):
     search_term = urlparse(rest).path
     start, end = extract_start_end_dates(rest)
     params = {"term": search_term, "start": start, "end": end}
-    print("Parameters:",params)
+    print("Parameters:", params)
     return params
 
 
@@ -129,16 +137,18 @@ def compute_binary_occurrence_array(term, start, end):
     current = start
     result = []
     while current <= end:
-        result.append( day_contains_term(current, term) )
+        result.append(day_contains_term(current, term))
         current = next_day(current)
     return result
+
 
 def day_contains_term(date, term):
     return term in get_topics_for_date(date)
 
+
 def extract_start_end_dates(path):
     components = urlparse(path)
-    dates = parse_qs(components.query,strict_parsing=True)
+    dates = parse_qs(components.query, strict_parsing=True)
     start_str = dates["start"][0]
     end_str = dates["end"][0]
     start = datetime.strptime(start_str, d["http-date-format"])
@@ -153,23 +163,27 @@ def load_data_into_memory():
         date = extract_date_from_file_name(file)
         date_string = date.strftime(d["date-format"])
         data[date_string] = read_file_for_date(date)
-    print("Loaded",len(topic_files),"dates.")
+    print("Loaded", len(topic_files), "dates.")
+
 
 def get_topics_for_date(date):
     date_string = date.strftime(d["date-format"])
     return data[date_string]
 
+
 def extract_date_from_file_name(name):
     date_string = name[len(d["data-file-prefix"]):][:-len(d["data-path-suffix"])]
     return datetime.strptime(date_string, d["date-format"])
+
 
 def all_files_in_data():
     all_files = os.listdir(d["data-folder"])
     return [
         file for file in all_files
         if file.startswith(d["data-file-prefix"])
-        and file.endswith(d["data-path-suffix"])
+           and file.endswith(d["data-path-suffix"])
     ]
+
 
 # main
 if __name__ == "__main__":
