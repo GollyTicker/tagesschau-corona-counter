@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+
+  tagesschau-runner:
+    container_name: tagesschau-runner
+    image: tagesschau:v1
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+    networks:
+      - tagesschau-net
+
+  tagesschau-reloader:
+    container_name: tagesschau-reloader
+    image: tagesschau-reloader:v1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/app/data
+      - ./config:/app/config
+    networks:
+      - tagesschau-net
+
+networks:
+  tagesschau-net:
+    name: tageschau-net

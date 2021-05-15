@@ -1,5 +1,5 @@
 FROM python:3.9-slim-buster
-RUN apt update && apt install -y python3-pip
+RUN apt-get update && apt-get install -y python3-pip
 WORKDIR /app
 RUN mkdir data
 COPY requirements.txt ./

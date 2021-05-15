@@ -1,0 +1,6 @@
+FROM docker:stable
+COPY docker/crontab /etc/cron/crontab
+RUN crontab /etc/cron/crontab
+WORKDIR /app
+COPY docker/reloading-download-latest-data.sh docker/
+CMD crond -f

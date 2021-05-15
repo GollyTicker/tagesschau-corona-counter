@@ -6,7 +6,6 @@
 # change config to: end-date -> 'latest'
 sed -i '/end-date/d' config/config.yml
 echo 'end-date: "latest"' >> config/config.yml
-# cat config/config.yml
 
 # run download
 python3 -u src/1-download-data.py

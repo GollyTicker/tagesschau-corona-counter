@@ -7,9 +7,11 @@ the recent 30 days in the "20 Uhr Tagesschau" topic list.
 
 If you know `docker`:
 
-1. Requires `docker`
+1. Requires `docker` and `docker-compose`
 1. Follow the [download instructions](#downloading-the-data) below
-1. `./restart-http-service.sh`
+1. `./restart-service.sh`
+
+In addition to the HTTP service it starts another container that downloads the latest data from Tagesschau once per day.
 
 Otherwise:
 
@@ -50,7 +52,7 @@ higher performance during requests.
 
 You can web-scrape and download all topic descriptions for specified a time period.
 
-1. Edit `config.yml` and set `start-date` and `end-date` to the first and last dates for which you want to download the
+1. Edit `config/config.yml` and set `start-date` and `end-date` to the first and last dates for which you want to download the
    text. Please use the format specified in `date-format`. Alternatively, you can set `end-date` to `latest` which will
    download until the last aired show.
 1. Run `python3 src/1-download-data.py` (only outside of docker)
@@ -60,6 +62,10 @@ You can web-scrape and download all topic descriptions for specified a time peri
 
 If you have already downloaded the dataset and want to update the most recent days, then run `download-data-latest.sh`.
 It will download all topics from `start-date` to today (or yesterday if none exists for today).
+
+### Automatic regular download
+
+If you used docker compose, then a cronjob docker container is started, which downloads the newest data once per day at `21` local time.
 
 ## Dataset
 
@@ -72,35 +78,23 @@ automatically.
 Python is invoked with the `-u` option inside the docker container to provide immediate stdout prints as otherwise the
 buffering may confuse a user who downloads the data.
 
-## Vue Project (work in progress)
+## Vue Frontend (work in progress)
 
-First start the http backend service locally using `./restart-http-service.sh`
+First start the http backend service locally using `./restart-service.sh`
 
 Then continue with the rest in the working directory: `web`
 
 **Setup**
-
 ```
 npm install
 ```
 
 **Compiles and hot-reloads for development**
-
 ```
 npm run serve
 ```
 
 **Compiles and minifies for production**
-
 ```
 npm run build
 ```
-
-**Lints and fixes files**
-
-```
-npm run lint
-```
-
-**Customize configuration**
-See [Configuration Reference](https://cli.vuejs.org/config/).
