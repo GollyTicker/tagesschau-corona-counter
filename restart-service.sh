@@ -9,7 +9,7 @@ source config/source.sh
 docker build -f docker/Dockerfile -t tagesschau:v1 .
 docker build -f docker/Dockerfile.regular-download -t tagesschau-reloader:v1 .
 
-docker-compose up --build
+docker-compose up -d --build
 
 # to debug use:
 # docker-compose run --rm -it tagesschau-runner
