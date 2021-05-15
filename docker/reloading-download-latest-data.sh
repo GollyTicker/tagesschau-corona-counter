@@ -9,3 +9,12 @@ docker run --rm \
  tagesschau:v1 /bin/sh src/internal-download-data.sh
 
 echo "============ FINISHED DOWNLOAD OF LATEST DATA =========== $(date)"
+
+
+
+echo "============ RESTARTING HTTP SERVICE ============ $(date)"
+
+. config/source.sh
+docker restart tagesschau-runner
+
+echo "============ DONE RESTARTING HTTP SERVICE ============ $(date)"

@@ -46,7 +46,9 @@ in `[Tuesday, Wednesday, Thursday, Friday]` contribute to the count. Note, that 
 days before `start` are needed to count the sum for the first `N-1` elements of the result.
 
 If you download new data, you will need to restart the HTTP-Server as it loads everything into memory during startup for
-higher performance during requests.
+higher performance during requests. For that simply use `docker restart tagesschau-runner`.
+
+The automatic scheduled update of the data also restarts the http service container `tagesschau-runner` to refresh its cache.
 
 ## Downloading the data
 
@@ -77,6 +79,9 @@ automatically.
 
 Python is invoked with the `-u` option inside the docker container to provide immediate stdout prints as otherwise the
 buffering may confuse a user who downloads the data.
+
+Additionally, if you want to manually start or stop containers using `docker-compose`,
+you first need to `source config/source.sh`.
 
 ## Vue Frontend (work in progress)
 

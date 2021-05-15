@@ -12,4 +12,4 @@ docker build -f docker/Dockerfile.regular-download -t tagesschau-reloader:v1 .
 docker-compose up -d --build
 
 # to debug use:
-# docker-compose run --rm -it tagesschau-runner
+# docker-compose run --rm -it tagesschau-runner /bin/bash
