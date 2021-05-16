@@ -1,2 +1,2 @@
-* 21 * * * /app/docker/reloading-download-latest-data.sh 2>&1
+* 21 * * * (cd /app && /app/docker/reloading-download-latest-data.sh 2>&1)
 # crontab requires an empty line at the end of the file
