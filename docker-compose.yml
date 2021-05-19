@@ -8,7 +8,7 @@ services:
     ports:
       - ${PORT}:${PORT}
     volumes:
-      - ./data:/app/data
+      - tagesschau-data:/app/data
       - ./config:/app/config
     networks:
       - tagesschau-net
@@ -18,7 +18,7 @@ services:
     image: tagesschau-reloader:v1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/app/data
+      - tagesschau-data:/app/data
       - ./config:/app/config
     networks:
       - tagesschau-net
@@ -26,3 +26,10 @@ services:
 networks:
   tagesschau-net:
     name: tageschau-net
+
+volumes:
+  tagesschau-data:
+    name: tagesschau-data
+    driver: local-persist
+    driver_opts:
+      mountpoint: ${PWD}/data

@@ -8,6 +8,7 @@ the recent 30 days in the "20 Uhr Tagesschau" topic list.
 If you know `docker`:
 
 1. Requires `docker` and `docker-compose`
+1. Requires [local-persist](https://github.com/MatchbookLab/local-persist#installing--running) plugin.
 1. Follow the [download instructions](#downloading-the-data) below
 1. `./restart-service.sh`
 
