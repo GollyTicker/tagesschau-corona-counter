@@ -30,4 +30,4 @@ sum-path: "/sum"
 http-date-format: "%Y.%m.%d"
 
 # Webserver
-web-port: 80
+web-port: 11080
