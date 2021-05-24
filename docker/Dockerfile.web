@@ -1,0 +1,9 @@
+FROM node:14-alpine
+WORKDIR web
+COPY web/package.json ./
+COPY web/package-lock.json ./
+RUN npm ci
+COPY web/* ./
+# TODO: add install statements according to vue-cli-service?
+RUN npm run build
+CMD npm start

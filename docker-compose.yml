@@ -13,6 +13,9 @@ services:
     networks:
       - tagesschau-net
 
+  # TODO: add webserver here.
+  # TODO: add hot-reloading debug mode here: https://www.freecodecamp.org/news/how-to-enable-live-reload-on-docker-based-applications/
+
   tagesschau-reloader:
     container_name: tagesschau-reloader
     image: tagesschau-reloader:v1
