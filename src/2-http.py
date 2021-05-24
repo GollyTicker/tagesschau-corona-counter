@@ -13,7 +13,7 @@ data = {}
 
 
 def run_http_server():
-    server_address = ("0.0.0.0", d["http-listen-port"])
+    server_address = ("0.0.0.0", d["api-port"])
     httpd = HTTPServer(server_address, Handler)
     print(f"Serving at {server_address}")
     httpd.serve_forever()

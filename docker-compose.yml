@@ -2,19 +2,25 @@ version: "3.9"
 
 services:
 
-  tagesschau-runner:
-    container_name: tagesschau-runner
+  tagesschau-api:
+    container_name: tagesschau-api
     image: tagesschau:v1
     ports:
-      - ${PORT}:${PORT}
+      - ${API_PORT}:${API_PORT}
     volumes:
       - tagesschau-data:/app/data
       - ./config:/app/config
     networks:
       - tagesschau-net
 
-  # TODO: add webserver here.
-  # TODO: add hot-reloading debug mode here: https://www.freecodecamp.org/news/how-to-enable-live-reload-on-docker-based-applications/
+  tagesschau-web:
+    container_name: tagesschau-web
+    image: tagesschau-web:v1
+    ports:
+      - ${WEB_PORT}:${WEB_PORT}
+    command: serve -s -l ${WEB_PORT} dist
+    networks:
+      - tagesschau-net
 
   tagesschau-reloader:
     container_name: tagesschau-reloader

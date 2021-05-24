@@ -15,6 +15,6 @@ echo "============ FINISHED DOWNLOAD OF LATEST DATA =========== $(date)"
 echo "============ RESTARTING HTTP SERVICE ============ $(date)"
 
 . config/source.sh
-docker restart tagesschau-runner
+docker restart tagesschau-api
 
 echo "============ DONE RESTARTING HTTP SERVICE ============ $(date)"

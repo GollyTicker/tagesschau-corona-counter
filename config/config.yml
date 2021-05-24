@@ -23,8 +23,11 @@ data-path-suffix: ".txt"
 
 
 # HTTP server
-http-listen-port: 11000
+api-port: 11000
 find-path: "/find"
 text-path: "/text"
 sum-path: "/sum"
 http-date-format: "%Y.%m.%d"
+
+# Webserver
+web-port: 80

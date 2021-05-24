@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-# with "--dev" docker-compose is run in terminal without --detach
+# Running this script with "--dev" runs
+# docker-compose without --detach
 
 source config/source.sh
 
@@ -9,12 +10,12 @@ source config/source.sh
 
 ./build-docker-images.sh
 
-DETACH_ARG="-d"
+COMPOSE_ARGS=""
+UP_ARGS="-d"
 if [ "$1" = "--dev" ]; then
-  DETACH_ARG=""
+  COMPOSE_ARGS="-f docker-compose-dev.yml"
+  UP_ARGS=""
 fi
 
-docker-compose up $DETACH_ARG --build
-
-# to debug use:
-# docker-compose run --rm -it tagesschau-runner /bin/bash
+# shellcheck disable=SC2086
+docker-compose -f docker-compose.yml $COMPOSE_ARGS up $UP_ARGS --build

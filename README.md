@@ -5,25 +5,27 @@ the recent 30 days in the "20 Uhr Tagesschau" topic list.
 
 ## Setup
 
-If you know `docker`:
-
 1. Requires `docker` and `docker-compose`
 1. Requires [local-persist](https://github.com/MatchbookLab/local-persist#installing--running) plugin.
 1. Follow the [download instructions](#downloading-the-data) below
-1. `./restart-service.sh`
 
-In addition to the HTTP service it starts another container that downloads the latest data from Tagesschau once per day.
+## Starting the service
 
-Otherwise:
+```./restart-service.sh```
 
-1. Requires `python`
-1. Install dependencies via `pip install -r requirements.txt`
-1. Follow the [download instructions](#downloading-the-data) below
-1. Start local HTTP service using `python3 src/2-http.py`
+Given the configuration `config/config.yml`, it starts
 
-## HTTP Service
+* `tagesschau-api`, the HTTP data service at the port `api-port`
+* `tagesschau-web`, the web server running at port `web-port`
+* `tagesschau-reloader`, a service which downloads new data once per day and ensures new data is used in the other
+  services
 
-The HTTP service consits of three paths.
+In addition to the HTTP data service it starts another container that downloads the latest data from Tagesschau once per
+day.
+
+## HTTP Data Service
+
+The HTTP data service `tagesschau-api` consists of three paths.
 
 * `/find/<term>` which searches for hits for a `term`
 * `/text` which returns the text for a given range of dates and
@@ -47,9 +49,10 @@ in `[Tuesday, Wednesday, Thursday, Friday]` contribute to the count. Note, that 
 days before `start` are needed to count the sum for the first `N-1` elements of the result.
 
 If you download new data, you will need to restart the HTTP-Server as it loads everything into memory during startup for
-higher performance during requests. For that simply use `docker restart tagesschau-runner`.
+higher performance during requests. For that simply use `docker restart tagesschau-api`.
 
-The automatic scheduled update of the data also restarts the http service container `tagesschau-runner` to refresh its cache.
+The automatic scheduled update of the data also restarts the http service container `tagesschau-api` to refresh its
+cache.
 
 ## Downloading the data
 
@@ -63,44 +66,34 @@ You can web-scrape and download all topic descriptions for specified a time peri
    some description is suspiciously small or large, perhaps something was scraped and mistaken as the topic description.
 1. View the topic descriptions in the respective files in `data` - i.e. `data/topics-2021.01.15.txt` for `2021.15.01`
 
-If you have already downloaded the dataset and want to update the most recent days, then run `download-data-latest.sh`.
-It will download all topics from `start-date` to today (or yesterday if none exists for today).
+If you have already downloaded the dataset and want to update the most recent days, then
+run `local-download-data-latest.sh`. It will download all topics from `start-date` to today (or yesterday if none exists
+for today).
 
 ### Automatic regular download
 
-If you used docker compose, then a cronjob docker container is started, which downloads the newest data once per day at `21` local time.
+The `tagesschau-reloader` container is starts a cronjob, which downloads the newest data once per day at `20:00` UTC
+time.
 
 ## Dataset
 
-It was verified that the download of the topics text succeeds for all dates from `2014.01.01` to `2021.01.29`. Expected
+It was verified that the download of the topics text succeeds for all dates from `2014.01.01` to `2021.05.15`. Expected
 failure dates are recorded in `config.yml` in `ignore-error-dates`. For these dates, en empty text is added
 automatically.
+
+## Development mode
+
+Use `./restart-service --dev` to start the docker containers in dev mode.
+
+Additionally, if you want to manually start or stop containers using `docker-compose`, you first need
+to `source config/source.sh`.
+
+## Web Frontend
+
+The frontend is written with NodeJS, NPM and Vue. In dev mode the `web/src` folder is mounted so that changes in the src
+folder are compiled and hot-reloaded into the development web server.
 
 ## Notes
 
 Python is invoked with the `-u` option inside the docker container to provide immediate stdout prints as otherwise the
 buffering may confuse a user who downloads the data.
-
-Additionally, if you want to manually start or stop containers using `docker-compose`,
-you first need to `source config/source.sh`.
-
-## Vue Frontend (work in progress)
-
-First start the http backend service locally using `./restart-service.sh`
-
-Then continue with the rest in the working directory: `web`
-
-**Setup**
-```
-npm install
-```
-
-**Compiles and hot-reloads for development**
-```
-npm run serve
-```
-
-**Compiles and minifies for production**
-```
-npm run build
-```

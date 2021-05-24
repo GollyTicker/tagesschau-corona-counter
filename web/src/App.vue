@@ -58,7 +58,6 @@
     </h3>
     <p>{{ answer }}</p>
     <!-- TODO: handling of various resolutions? -->
-    <!-- TODO: fix confusing thing, that using same start and end date returns two-element array. -->
   </div>
 </template>
 
@@ -72,7 +71,7 @@ const requestURL = (term, n) =>
     + location.hostname + ":11000/"
     + "sum/" + encodeURIComponent(term)
     + "?n=" + encodeURIComponent(n)
-    + "&start=2021.03.01&end=2021.03.01";
+    + "&start=2021.05.01&end=2021.05.01";
 
 const getN = () => document.getElementById("n").innerText;
 const getTerm = () => document.getElementById("term").innerText;

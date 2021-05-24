@@ -1,1 +1,2 @@
-export PORT=$(cat config/config.yml | grep "http-listen-port" | awk '{print $2}')
+export API_PORT=$(cat config/config.yml | grep "api-port" | awk '{print $2}')
+export WEB_PORT=$(cat config/config.yml | grep "web-port" | awk '{print $2}')
