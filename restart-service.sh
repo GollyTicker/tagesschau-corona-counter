@@ -1,15 +1,20 @@
 #!/bin/bash
 set -e
 
-# Call this script with --dev option to run docker container directly.
+# with "--dev" docker-compose is run in terminal without --detach
+
 source config/source.sh
 
 ./stop-service.sh
 
-docker build -f docker/Dockerfile -t tagesschau:v1 .
-docker build -f docker/Dockerfile.regular-download -t tagesschau-reloader:v1 .
+./build-docker-images.sh
 
-docker-compose up -d --build
+DETACH_ARG="-d"
+if [ "$1" = "--dev" ]; then
+  DETACH_ARG=""
+fi
+
+docker-compose up $DETACH_ARG --build
 
 # to debug use:
 # docker-compose run --rm -it tagesschau-runner /bin/bash
