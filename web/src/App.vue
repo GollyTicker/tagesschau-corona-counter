@@ -8,9 +8,14 @@
         (at least in Germany, Europe)
       </span>
     </h1>
+
+    <h3>
+      How often was "Corona" mentioned in the Tagesschau 20 Uhr in the past "30 days"?
+    </h3>
+
     <!-- these explanations can come into a closeable paragraph. -->
     <p>
-      The pandemic has been greatly influencing and shaping the lives of many humans
+      The pandemic has been strongly influencing and shaping the lives of many humans
       around the world for more than one year. <br/>
       With the recent developments in vaccines and our possibility to organise ourselves, <br/>
       we have the tools in our hands to make the pandemic a thing of the past
@@ -57,7 +62,16 @@
                                contenteditable>30</span> days?
     </h3>
     <p>{{ answer }}</p>
-    <!-- TODO: handling of various resolutions? -->
+    <!-- TODO: handling of various resolutions?
+
+      todo: einleitung könnte kürzer sein
+      todo: justified textarea
+
+      todo: I could use Elm for a clean and reliable developer experience :)
+
+      Also, in many ways, security and reliability is much easier with
+      languages like Elm and Haskell - rather than their conventional counterparts (JS, Java).
+    -->
   </div>
 </template>
 
