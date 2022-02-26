@@ -7,7 +7,7 @@ per-date-path-format: "%Y%m%d"
 per-date-search-for-subpage: "tagesschau"
 
 date-format: "%Y.%m.%d"
-start-date: 2021.06.14
+start-date: 2022.02.01
 end-date: latest
 
 # for some dates, we expect the web scraping to fail for various reasons.
