@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+
+  tagesschau-api:
+    container_name: tagesschau-api
+    image: tagesschau:v1
+    ports:
+      - ${API_PORT}:${API_PORT}
+    volumes:
+      - tagesschau-data:/app/data
+      - ./config:/app/config
+    networks:
+      - tagesschau-net
+
+  tagesschau-web:
+    container_name: tagesschau-web
+    image: tagesschau-web:v1
+    ports:
+      - ${WEB_PORT}:${WEB_PORT}
+    command: serve -s -l ${WEB_PORT} dist
+    networks:
+      - tagesschau-net
+
+  tagesschau-reloader:
+    container_name: tagesschau-reloader
+    image: tagesschau-reloader:v1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - tagesschau-data:/app/data
+      - ./config:/app/config
+    networks:
+      - tagesschau-net
+
+networks:
+  tagesschau-net:
+    name: tageschau-net
+
+volumes:
+  tagesschau-data:
+    name: tagesschau-data
+    driver: local-persist
+    driver_opts:
+      mountpoint: ${PWD}/data
