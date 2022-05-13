@@ -1,11 +1,10 @@
 version: "3.9"
 
 services:
-
   # hot-reloading web-service
   tagesschau-web:
     container_name: tagesschau-web
-    image: tagesschau-web:v1
+    image: tagesschau-web:dev
     ports:
       - ${WEB_PORT}:${WEB_PORT}
     command: npm run serve -- --port ${WEB_PORT}

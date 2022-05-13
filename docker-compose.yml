@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-
   tagesschau-api:
     container_name: tagesschau-api
     image: tagesschau:v1
@@ -17,8 +16,7 @@ services:
     container_name: tagesschau-web
     image: tagesschau-web:v1
     ports:
-      - ${WEB_PORT}:${WEB_PORT}
-    command: serve -s -l ${WEB_PORT} dist
+      - ${WEB_PORT}:80
     networks:
       - tagesschau-net
 
