@@ -1,3 +1,9 @@
-data*
+data
+.git
+.idea
+.run
 **/node_modules
-web/dist
+**/dist
+*.gif
+*.png
+**/__pycache__

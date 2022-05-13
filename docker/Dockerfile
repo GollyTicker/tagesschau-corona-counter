@@ -1,5 +1,4 @@
-FROM python:3.9-slim-buster
-RUN apt-get update && apt-get install -y python3-pip
+FROM python:3.10-slim
 WORKDIR /app
 RUN mkdir data
 COPY requirements.txt ./

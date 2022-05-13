@@ -83,7 +83,7 @@ automatically.
 
 ## Development mode
 
-Use `./restart-service --dev` to start the docker containers in dev mode.
+Use `./restart-service dev` to start the docker containers in dev mode.
 
 Additionally, if you want to manually start or stop containers using `docker-compose`, you first need
 to `source config/source.sh`.
@@ -91,7 +91,7 @@ to `source config/source.sh`.
 ## Web Frontend
 
 The frontend is written with NodeJS, NPM and Vue. In dev mode the `web/src` folder is mounted so that changes in the src
-folder are compiled and hot-reloaded into the development web server.
+folder are compiled and hot-reloaded into the development web server. The frontend is served via nginx inside a docker container in production.
 
 ## Notes
 
