@@ -16,7 +16,7 @@
     "@babel/core": "^7.17.10",
     "@vue/cli-plugin-babel": "~5.0.4",
     "@vue/cli-service": "~5.0.4",
-    "eslint": "^8.15.0"
+    "eslint": "^8.16.0"
   },
   "eslintConfig": {
     "root": true,
