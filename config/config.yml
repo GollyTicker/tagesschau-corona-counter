@@ -14,6 +14,7 @@ end-date: latest
 # Hence we do not want to raise an error, when processing these dates
 ignore-error-dates:
   - 2018.08.19 # no Tagesschau 20 Uhr exists for this date
+  - 2022.06.08 # same
 
 # path is used for download as well as for later aggregation of data
 data-folder: "data"
