@@ -16,7 +16,7 @@ the recent 30 days in the "20 Uhr Tagesschau" topic list.
 Given the configuration `config/config.yml`, it starts
 
 * `tagesschau-api`, the HTTP data service at the port `api-port`
-* `tagesschau-web`, the web server running at port `web-port`
+* `tagesschau-web`, the web server running at port `web-port` accessing the `tagesschau-api` via iwht public path
 * `tagesschau-reloader`, a service which downloads new data once per day and ensures new data is used in the other
   services
 

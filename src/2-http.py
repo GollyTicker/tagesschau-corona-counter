@@ -9,34 +9,32 @@ import numpy as np
 
 from shared import d, next_day, read_file_for_date, n_days_before
 
+FIND_PATH_PREFIX = d["find-path"] + "/"
+TEXT_PATH_PREFIX = d["text-path"]
+SUM_PATH_PREFIX = d["sum-path"] + "/"
+
 data = {}
 
-
 def run_http_server():
-    server_address = ("0.0.0.0", d["api-port"])
+    server_address = ("0.0.0.0", d["api-port-internal"])
     httpd = HTTPServer(server_address, Handler)
     print(f"Serving at {server_address}")
     httpd.serve_forever()
-
 
 # HTTP requests handler
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
 
-        find_path_prefix = d["find-path"] + "/"
-        text_path_prefix = d["text-path"]
-        sum_path_prefix = d["sum-path"] + "/"
-
-        if self.path.startswith(find_path_prefix):
-            path_rest = self.path[len(find_path_prefix):]
+        if self.path.startswith(FIND_PATH_PREFIX):
+            path_rest = self.path[len(FIND_PATH_PREFIX):]
             self.with_exceptions_as_http(process_find_request, [path_rest])
 
-        elif self.path.startswith(text_path_prefix):
-            path_rest = self.path[len(text_path_prefix):]
+        elif self.path.startswith(TEXT_PATH_PREFIX):
+            path_rest = self.path[len(TEXT_PATH_PREFIX):]
             self.with_exceptions_as_http(process_text_request, [path_rest])
 
-        elif self.path.startswith(sum_path_prefix):
-            path_rest = self.path[len(sum_path_prefix):]
+        elif self.path.startswith(SUM_PATH_PREFIX):
+            path_rest = self.path[len(SUM_PATH_PREFIX):]
             self.with_exceptions_as_http(process_sum_request, [path_rest])
 
         else:

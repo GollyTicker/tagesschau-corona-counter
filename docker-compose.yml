@@ -4,8 +4,6 @@ services:
   tagesschau-api:
     container_name: tagesschau-api
     image: tagesschau:v1
-    ports:
-      - ${API_PORT}:${API_PORT}
     volumes:
       - tagesschau-data:/app/data
       - ./config:/app/config
@@ -32,7 +30,7 @@ services:
 
 networks:
   tagesschau-net:
-    name: tageschau-net
+    name: tagesschau-net
 
 volumes:
   tagesschau-data:

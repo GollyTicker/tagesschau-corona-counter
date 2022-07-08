@@ -81,8 +81,8 @@ const _ = require("lodash");
 
 
 const requestURL = (term, n) =>
-    location.protocol + "//"
-    + location.hostname + ":11000/"
+    "https://"
+    + location.hostname + "/tagesschau-counter/api/"
     + "sum/" + encodeURIComponent(term)
     + "?n=" + encodeURIComponent(n)
     + "&start=2021.05.01&end=2021.05.01";

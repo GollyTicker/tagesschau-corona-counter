@@ -23,7 +23,8 @@ data-path-prefix: "data/topics-"
 data-path-suffix: ".txt"
 
 # HTTP server
-api-port: 11000
+api-path-public: "/tagesschau-counter/api"
+api-port-internal: 11000
 find-path: "/find"
 text-path: "/text"
 sum-path: "/sum"
