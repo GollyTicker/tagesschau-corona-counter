@@ -12,15 +12,15 @@ fi
 
 YESTERDAY="$(date --date=yesterday "+%Y.%m.%d")"
 
-URL="http://swaneet.eu:11000"
+URL="https://swaneet.eu/tagesschau-counter/api"
 
-PATH="/sum/Corona"
+URI_PATH="/sum/Corona"
 
 QUERY_PARAMS="n=30&start=2020.02.01&end=$YESTERDAY"
 
-COMMAND="$CURL -s $URL$PATH?$QUERY_PARAMS"
+COMMAND="$CURL -s $URL$URI_PATH?$QUERY_PARAMS"
 
-JSON="$($COMMAND)"
+JSON="$($COMMAND || echo "")"
 
 if [[ "$JSON" == "" ]]; then
   echo "Error with request. Aborting"
