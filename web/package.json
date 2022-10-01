@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^3.25.3",
     "lodash": "^4.17.21",
-    "vue": "^3.2.38"
+    "vue": "^3.2.40"
   },
   "devDependencies": {
     "@babel/core": "^7.18.13",
