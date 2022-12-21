@@ -89,7 +89,7 @@ def extract_sum_request_parameters(rest):
 # using a sliding algorithm where a+b+c -> b+c -> b+c+d in each iteration.
 def scansum(N, a):
     L = len(a) - (N - 1)
-    result = np.zeros(L, dtype=np.int)
+    result = np.zeros(L, dtype=np.int64)
     s = 0
     for i in range(len(a)):
         s = s + a[i]
