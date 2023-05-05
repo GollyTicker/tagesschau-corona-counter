@@ -10,7 +10,9 @@ if [[ "$JQ" == "" ]]; then
   exit 1
 fi
 
-YESTERDAY="$(date --date=yesterday "+%Y.%m.%d")"
+#YESTERDAY="$(date --date=yesterday "+%Y.%m.%d")"
+# Using last date on which website scraping still worked
+YESTERDAY="2023.04.24"
 
 URL="https://swaneet.eu/tagesschau-counter/api"
 
@@ -28,4 +30,3 @@ if [[ "$JSON" == "" ]]; then
 fi
 
 echo "$JSON" | $JQ ".result | min"
-
