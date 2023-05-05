@@ -7,8 +7,8 @@ per-date-path-format: "%Y%m%d"
 per-date-search-for-subpage: "tagesschau"
 
 date-format: "%Y.%m.%d"
-start-date: 2022.06.28
-end-date: latest
+start-date: 2023.04.01
+end-date: 2023.04.24 # website changed after this date. I didn't brother updating it anymore.
 
 # for some dates, we expect the web scraping to fail for various reasons.
 # Hence we do not want to raise an error, when processing these dates
