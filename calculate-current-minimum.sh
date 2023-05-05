@@ -12,13 +12,13 @@ fi
 
 #YESTERDAY="$(date --date=yesterday "+%Y.%m.%d")"
 # Using last date on which website scraping still worked
-YESTERDAY="2023.04.24"
+YESTERDAY="2023.04.01"
 
 URL="https://swaneet.eu/tagesschau-counter/api"
 
 URI_PATH="/sum/Corona"
 
-QUERY_PARAMS="n=30&start=2020.02.01&end=$YESTERDAY"
+QUERY_PARAMS="n=30&start=2023.03.15&end=$YESTERDAY"
 
 COMMAND="$CURL -s $URL$URI_PATH?$QUERY_PARAMS"
 

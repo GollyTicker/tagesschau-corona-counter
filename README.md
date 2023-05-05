@@ -3,6 +3,34 @@
 A simple web-scraper that provides utilities to count the number of occurences of "Corona" and related keywords within
 the recent 30 days in the "20 Uhr Tagesschau" topic list.
 
+---
+
+# THE BET
+
+Out of fun, my friends and me had made a bet. The bet was to estimate the first date on which the following statement will be true (after start of Corona pandemic on 01.02.2020):
+
+`the number of days within the last n=30 days on which the Tagesschau summary contains the string "Corona" is at-most 1`
+
+The goal of this bet was to have a data-driven approach on answering the question `When is Corona considered done in society?`
+
+The bet assumes, that once the mainstream media (Tagesschau in this case), stops reporting on Corona for almost a full month, we can say, that the society isn't very much interested in Corona anymore.
+
+# THE BET IS FINISHED
+
+Final Result: 🥳 **21.03.2023** 🥳
+
+On 21st March 2023, for the first time since the start of the pandemic, the string `Corona` occurred at-most once in the Tagesschau News in the 30 days leading to 21st March. 
+
+[Proof](https://swaneet.eu/tagesschau-counter/api/sum/Corona?n=30&start=2023.02.28&end=2023.03.31)
+
+---
+
+Note, that the web-scraing stopped working on 25th April 2023. I didn't fix the web-scraping anymore, as the bet was over. Hence, the code in this repository is not in a fully functional state.
+
+I hence also deactivated the web-scraping cronjob.
+
+---
+
 ## Setup
 
 1. Requires `docker` and `docker-compose`

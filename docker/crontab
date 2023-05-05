@@ -1,3 +1,4 @@
 # 20:00 UTC is 22:00 Europe Summer Time and 21:00 Europe Standard Time
-0 20 * * * (cd /app && /app/docker/reloading-download-latest-data.sh 2>&1)
+0 20 0 * * (echo "THE BET IS OVER. No more downloading")
+# (cd /app && /app/docker/reloading-download-latest-data.sh 2>&1)
 # crontab requires an empty line at the end of the file
