@@ -10,13 +10,13 @@ services:
     networks:
       - tagesschau-net
 
-  tagesschau-web:
-    container_name: tagesschau-web
-    image: tagesschau-web:v1
-    ports:
-      - ${WEB_PORT}:80
-    networks:
-      - tagesschau-net
+# tagesschau-web:
+#    container_name: tagesschau-web
+#    image: tagesschau-web:v1
+#    ports:
+#      - ${WEB_PORT}:80
+#    networks:
+#      - tagesschau-net
 
   tagesschau-reloader:
     container_name: tagesschau-reloader
