@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python@sha256:7a3ed1226224bcc1fe5443262363d42f48cf832a540c1836ba8ccbeaadf8637c
 WORKDIR /app
 RUN mkdir data
 COPY requirements.txt ./
