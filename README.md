@@ -21,7 +21,7 @@ Final Result: 🥳 **21.03.2023** 🥳
 
 On 21st March 2023, for the first time since the start of the pandemic, the string `Corona` occurred at-most once in the Tagesschau News in the 30 days leading to 21st March. 
 
-[Proof](https://swaneet.eu/tagesschau-counter/api/sum/Corona?n=30&start=2023.02.28&end=2023.03.31)
+[Proof](https://ayake.net/tagesschau-counter/api/sum/Corona?n=30&start=2023.02.28&end=2023.03.31)
 
 ---
 

@@ -14,7 +14,7 @@ fi
 # Using last date on which website scraping still worked
 YESTERDAY="2023.04.01"
 
-URL="https://swaneet.eu/tagesschau-counter/api"
+URL="https://ayake.net/tagesschau-counter/api"
 
 URI_PATH="/sum/Corona"
 
